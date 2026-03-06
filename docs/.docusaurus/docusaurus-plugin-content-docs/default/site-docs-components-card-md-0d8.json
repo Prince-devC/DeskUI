@@ -1,0 +1,27 @@
+{
+  "id": "components/card",
+  "title": "DeskCard",
+  "description": "Grid card with icon and label. Fixed height for uniform grid layouts. Used for module navigation, shortcuts, and workspace items.",
+  "source": "@site/docs/components/card.md",
+  "sourceDirName": "components",
+  "slug": "/components/card",
+  "permalink": "/DeskUI/docs/components/card",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Prince-devC/DeskUI/tree/main/docs/docs/components/card.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "DeskStatusBadge",
+    "permalink": "/DeskUI/docs/components/status-badge"
+  },
+  "next": {
+    "title": "DeskListItem",
+    "permalink": "/DeskUI/docs/components/list-item"
+  }
+}

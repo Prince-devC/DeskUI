@@ -1,0 +1,23 @@
+{
+  "id": "layout/sidebar",
+  "title": "DeskSidebar",
+  "description": "Slide-out navigation panel with hierarchical items. Supports expand/collapse for items with children, active state highlighting, and indented sub-items.",
+  "source": "@site/docs/layout/sidebar.md",
+  "sourceDirName": "layout",
+  "slug": "/layout/sidebar",
+  "permalink": "/DeskUI/docs/layout/sidebar",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Prince-devC/DeskUI/tree/main/docs/docs/layout/sidebar.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "sidebar_position": 6
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "DeskPageHeader",
+    "permalink": "/DeskUI/docs/layout/page-header"
+  }
+}

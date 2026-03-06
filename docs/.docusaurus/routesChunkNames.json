@@ -1,0 +1,109 @@
+{
+  "/DeskUI/markdown-page-6e4": {
+    "__comp": "1f391b9e",
+    "__context": {
+      "plugin": "a7456010"
+    },
+    "content": "393be207"
+  },
+  "/DeskUI/docs-476": {
+    "__comp": "5e95c892",
+    "__context": {
+      "plugin": "aba21aa0"
+    }
+  },
+  "/DeskUI/docs-ea1": {
+    "__comp": "a7bd4aaa",
+    "__props": "266c71a6"
+  },
+  "/DeskUI/docs-b83": {
+    "__comp": "a94703ab"
+  },
+  "/DeskUI/docs/components/avatar-c55": {
+    "__comp": "17896441",
+    "content": "b5eb131b"
+  },
+  "/DeskUI/docs/components/button-23d": {
+    "__comp": "17896441",
+    "content": "9eb89d33"
+  },
+  "/DeskUI/docs/components/card-0db": {
+    "__comp": "17896441",
+    "content": "0d8bf7e4"
+  },
+  "/DeskUI/docs/components/checkbox-63c": {
+    "__comp": "17896441",
+    "content": "87878b99"
+  },
+  "/DeskUI/docs/components/filter-chip-fc6": {
+    "__comp": "17896441",
+    "content": "64853467"
+  },
+  "/DeskUI/docs/components/icon-box-a2c": {
+    "__comp": "17896441",
+    "content": "57443ffa"
+  },
+  "/DeskUI/docs/components/list-item-a49": {
+    "__comp": "17896441",
+    "content": "d7b385a1"
+  },
+  "/DeskUI/docs/components/search-bar-e32": {
+    "__comp": "17896441",
+    "content": "e37482ce"
+  },
+  "/DeskUI/docs/components/section-header-00e": {
+    "__comp": "17896441",
+    "content": "aab2ca82"
+  },
+  "/DeskUI/docs/components/select-bd4": {
+    "__comp": "17896441",
+    "content": "49928cf1"
+  },
+  "/DeskUI/docs/components/status-badge-92e": {
+    "__comp": "17896441",
+    "content": "859a4a60"
+  },
+  "/DeskUI/docs/components/text-field-2da": {
+    "__comp": "17896441",
+    "content": "f8b50342"
+  },
+  "/DeskUI/docs/getting-started-9f1": {
+    "__comp": "17896441",
+    "content": "d589d3a7"
+  },
+  "/DeskUI/docs/layout/bottom-bar-2a7": {
+    "__comp": "17896441",
+    "content": "8f64da01"
+  },
+  "/DeskUI/docs/layout/navbar-7b0": {
+    "__comp": "17896441",
+    "content": "bff1d69a"
+  },
+  "/DeskUI/docs/layout/page-header-99b": {
+    "__comp": "17896441",
+    "content": "212732b6"
+  },
+  "/DeskUI/docs/layout/scaffold-250": {
+    "__comp": "17896441",
+    "content": "ab86c127"
+  },
+  "/DeskUI/docs/layout/sidebar-92b": {
+    "__comp": "17896441",
+    "content": "c7dc769b"
+  },
+  "/DeskUI/docs/layout/tab-bar-ebd": {
+    "__comp": "17896441",
+    "content": "76a3746e"
+  },
+  "/DeskUI/docs/theme-1a1": {
+    "__comp": "17896441",
+    "content": "47a776f2"
+  },
+  "/DeskUI/-a3a": {
+    "__comp": "1df93b7f",
+    "__context": {
+      "plugin": "a7456010"
+    },
+    "config": "5e9f5e1a"
+  }
+}

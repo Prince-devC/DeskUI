@@ -1,0 +1,27 @@
+{
+  "id": "components/section-header",
+  "title": "DeskSectionHeader",
+  "description": "Uppercase section label with divider. Used to separate groups in forms and link lists.",
+  "source": "@site/docs/components/section-header.md",
+  "sourceDirName": "components",
+  "slug": "/components/section-header",
+  "permalink": "/DeskUI/docs/components/section-header",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Prince-devC/DeskUI/tree/main/docs/docs/components/section-header.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 10,
+  "frontMatter": {
+    "sidebar_position": 10
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "DeskSearchBar",
+    "permalink": "/DeskUI/docs/components/search-bar"
+  },
+  "next": {
+    "title": "DeskAvatar",
+    "permalink": "/DeskUI/docs/components/avatar"
+  }
+}

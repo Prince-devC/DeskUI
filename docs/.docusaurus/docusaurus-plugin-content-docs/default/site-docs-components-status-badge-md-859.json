@@ -1,0 +1,27 @@
+{
+  "id": "components/status-badge",
+  "title": "DeskStatusBadge",
+  "description": "Color-coded status indicator for document states. Automatically resolves colors from status strings or docstatus integers.",
+  "source": "@site/docs/components/status-badge.md",
+  "sourceDirName": "components",
+  "slug": "/components/status-badge",
+  "permalink": "/DeskUI/docs/components/status-badge",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Prince-devC/DeskUI/tree/main/docs/docs/components/status-badge.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "sidebar_position": 1
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Theme",
+    "permalink": "/DeskUI/docs/theme"
+  },
+  "next": {
+    "title": "DeskCard",
+    "permalink": "/DeskUI/docs/components/card"
+  }
+}

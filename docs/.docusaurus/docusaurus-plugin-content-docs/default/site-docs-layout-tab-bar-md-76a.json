@@ -1,0 +1,27 @@
+{
+  "id": "layout/tab-bar",
+  "title": "DeskTabBar",
+  "description": "Horizontal scrollable tab bar for form sections. Highlights the active tab with primary color.",
+  "source": "@site/docs/layout/tab-bar.md",
+  "sourceDirName": "layout",
+  "slug": "/layout/tab-bar",
+  "permalink": "/DeskUI/docs/layout/tab-bar",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Prince-devC/DeskUI/tree/main/docs/docs/layout/tab-bar.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 4,
+  "frontMatter": {
+    "sidebar_position": 4
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "DeskBottomBar",
+    "permalink": "/DeskUI/docs/layout/bottom-bar"
+  },
+  "next": {
+    "title": "DeskPageHeader",
+    "permalink": "/DeskUI/docs/layout/page-header"
+  }
+}

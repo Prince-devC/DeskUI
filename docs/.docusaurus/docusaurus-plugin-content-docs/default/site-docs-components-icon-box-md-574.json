@@ -1,0 +1,27 @@
+{
+  "id": "components/icon-box",
+  "title": "DeskIconBox",
+  "description": "Rounded square container for icons. Used inside DeskCard and anywhere an icon needs a background container.",
+  "source": "@site/docs/components/icon-box.md",
+  "sourceDirName": "components",
+  "slug": "/components/icon-box",
+  "permalink": "/DeskUI/docs/components/icon-box",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Prince-devC/DeskUI/tree/main/docs/docs/components/icon-box.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 12,
+  "frontMatter": {
+    "sidebar_position": 12
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "DeskAvatar",
+    "permalink": "/DeskUI/docs/components/avatar"
+  },
+  "next": {
+    "title": "DeskScaffold",
+    "permalink": "/DeskUI/docs/layout/scaffold"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "components/avatar",
+  "title": "DeskAvatar",
+  "description": "Circular avatar showing user initials. Uses primary color at 15% opacity as background.",
+  "source": "@site/docs/components/avatar.md",
+  "sourceDirName": "components",
+  "slug": "/components/avatar",
+  "permalink": "/DeskUI/docs/components/avatar",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Prince-devC/DeskUI/tree/main/docs/docs/components/avatar.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 11,
+  "frontMatter": {
+    "sidebar_position": 11
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "DeskSectionHeader",
+    "permalink": "/DeskUI/docs/components/section-header"
+  },
+  "next": {
+    "title": "DeskIconBox",
+    "permalink": "/DeskUI/docs/components/icon-box"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "theme",
+  "title": "Theme",
+  "description": "DeskUI uses a composable theme system built on CompositionLocal. Every visual property — colors, typography, shapes, spacing, and sizes — is configurable.",
+  "source": "@site/docs/theme.md",
+  "sourceDirName": ".",
+  "slug": "/theme",
+  "permalink": "/DeskUI/docs/theme",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/Prince-devC/DeskUI/tree/main/docs/docs/theme.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "sidebar_position": 2,
+    "slug": "/theme"
+  },
+  "sidebar": "docsSidebar",
+  "previous": {
+    "title": "Getting Started",
+    "permalink": "/DeskUI/docs/getting-started"
+  },
+  "next": {
+    "title": "DeskStatusBadge",
+    "permalink": "/DeskUI/docs/components/status-badge"
+  }
+}
