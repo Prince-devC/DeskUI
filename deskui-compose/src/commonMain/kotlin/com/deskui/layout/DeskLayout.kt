@@ -2,10 +2,16 @@ package com.deskui.layout
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Icon
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -14,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,7 +28,21 @@ import com.deskui.components.DeskNotificationBadge
 import com.deskui.components.DeskSearchBar
 import com.deskui.theme.DeskTheme
 
-// === NavBar ===
+// ============================================================
+// DeskNavBar
+// ============================================================
+// Top navigation bar with logo slot, search bar, notification bell,
+// and user avatar. Matches the Frappe desk navbar pattern.
+//
+// Usage:
+//   DeskNavBar(
+//       logo = { Image(painterResource(R.drawable.logo), null, Modifier.height(28.dp)) },
+//       searchQuery = query, onSearchChange = { query = it },
+//       unreadCount = 3, onNotificationClick = { showNotifs = true },
+//       userInitials = "AB"
+//   )
+// ============================================================
+
 @Composable
 fun DeskNavBar(
     logo: @Composable () -> Unit,
@@ -39,15 +58,14 @@ fun DeskNavBar(
     Column {
         Row(
             modifier.fillMaxWidth().background(DeskTheme.colors.surface)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = DeskTheme.spacing.lg, vertical = DeskTheme.spacing.sm),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(DeskTheme.spacing.md)
         ) {
             logo()
             DeskSearchBar(searchQuery, onSearchChange, onSearchClear, Modifier.weight(1f))
-            // Bell
             Box(Modifier.clickable(onClick = onNotificationClick)) {
-                Text("🔔", fontSize = 16.sp)
+                Icon(Icons.Default.Notifications, "Notifications", Modifier.size(20.dp), tint = DeskTheme.colors.text)
                 DeskNotificationBadge(unreadCount, Modifier.align(Alignment.TopEnd).offset(x = 6.dp, y = (-6).dp))
             }
             DeskAvatar(userInitials, Modifier.clickable(onClick = onAvatarClick))
@@ -56,11 +74,23 @@ fun DeskNavBar(
     }
 }
 
-// === Bottom Bar ===
+// ============================================================
+// DeskBottomBar
+// ============================================================
+// Bottom tab bar with icon + label tabs and optional badge counts.
+//
+// Usage:
+//   DeskBottomBar(
+//       tabs = listOf(DeskTab("Home", Icons.Default.Home), DeskTab("Pending", Icons.Default.Schedule)),
+//       selected = 0, badges = mapOf(1 to 5), onSelect = { tab = it }
+//   )
+// ============================================================
+
+data class DeskTab(val label: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
+
 @Composable
 fun DeskBottomBar(
-    tabs: List<String>,
-    icons: List<String> = listOf("🏠", "🕐"),
+    tabs: List<DeskTab>,
     selected: Int,
     badges: Map<Int, Int> = emptyMap(),
     onSelect: (Int) -> Unit,
@@ -72,22 +102,31 @@ fun DeskBottomBar(
             modifier.fillMaxWidth().background(DeskTheme.colors.surface).padding(horizontal = 40.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            tabs.forEachIndexed { i, label ->
+            tabs.forEachIndexed { i, tab ->
                 Column(Modifier.clickable { onSelect(i) }, horizontalAlignment = Alignment.CenterHorizontally) {
                     Box {
-                        Text(icons.getOrElse(i) { "📋" }, fontSize = 20.sp)
+                        Icon(tab.icon, tab.label, Modifier.size(22.dp),
+                            tint = if (selected == i) DeskTheme.colors.primary else DeskTheme.colors.textSecondary)
                         badges[i]?.let { badge ->
                             if (badge > 0) DeskNotificationBadge(badge, Modifier.align(Alignment.TopEnd).offset(x = 8.dp, y = (-4).dp))
                         }
                     }
-                    Text(label, fontSize = 11.sp, color = if (selected == i) DeskTheme.colors.primary else DeskTheme.colors.textSecondary)
+                    Text(tab.label, fontSize = 11.sp, color = if (selected == i) DeskTheme.colors.primary else DeskTheme.colors.textSecondary)
                 }
             }
         }
     }
 }
 
-// === Tab Bar (for forms) ===
+// ============================================================
+// DeskTabBar
+// ============================================================
+// Horizontal scrollable tab bar for form sections.
+//
+// Usage:
+//   DeskTabBar(tabs = listOf("Details", "Accounting", "More Info"), selected = 0, onSelect = { })
+// ============================================================
+
 @Composable
 fun DeskTabBar(tabs: List<String>, selected: Int, onSelect: (Int) -> Unit, modifier: Modifier = Modifier) {
     if (tabs.size > 1) {
@@ -108,7 +147,29 @@ fun DeskTabBar(tabs: List<String>, selected: Int, onSelect: (Int) -> Unit, modif
     }
 }
 
-// === Sidebar ===
+// ============================================================
+// DeskSidebar
+// ============================================================
+// Slide-out navigation panel with hierarchical items.
+// Supports expand/collapse for items with children.
+//
+// Usage:
+//   DeskSidebar(
+//       items = listOf(DeskSidebarItem("Home", Icons.Default.Home), ...),
+//       activeLabel = "Accounting", onItemClick = { }, onClose = { }
+//   )
+// ============================================================
+
+data class DeskSidebarItem(
+    val label: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
+    val type: String = "",
+    val linkTo: String? = null,
+    val hasChildren: Boolean = false,
+    val isExpanded: Boolean = false,
+    val indent: Boolean = false
+)
+
 @Composable
 fun DeskSidebar(
     items: List<DeskSidebarItem>,
@@ -117,12 +178,14 @@ fun DeskSidebar(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier.fillMaxHeight().background(DeskTheme.colors.surface).padding(vertical = 16.dp)
-    ) {
-        Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("PUBLIC", fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = DeskTheme.colors.textSecondary, letterSpacing = 0.5.sp)
-            Text("×", Modifier.clickable(onClick = onClose), fontSize = 14.sp, color = DeskTheme.colors.textSecondary)
+    Column(modifier.fillMaxHeight().background(DeskTheme.colors.surface).padding(vertical = DeskTheme.spacing.lg)) {
+        Row(
+            Modifier.fillMaxWidth().padding(horizontal = DeskTheme.spacing.lg, vertical = DeskTheme.spacing.sm),
+            horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("PUBLIC", fontSize = 11.sp, fontWeight = FontWeight.SemiBold,
+                color = DeskTheme.colors.textSecondary, letterSpacing = 0.5.sp)
+            Icon(Icons.Default.Close, "Close", Modifier.size(16.dp).clickable(onClick = onClose), tint = DeskTheme.colors.textSecondary)
         }
         Column(Modifier.verticalScroll(rememberScrollState())) {
             items.forEach { item ->
@@ -135,16 +198,25 @@ fun DeskSidebar(
                             RoundedCornerShape(if (isActive) DeskTheme.shapes.sidebar else 0.dp)
                         )
                         .clickable { onItemClick(item) }
-                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                        .padding(
+                            start = if (item.indent) 36.dp else DeskTheme.spacing.lg,
+                            end = DeskTheme.spacing.lg,
+                            top = 10.dp, bottom = 10.dp
+                        ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(item.icon, fontSize = 16.sp, modifier = Modifier.width(24.dp))
+                    Icon(item.icon, null, Modifier.size(18.dp),
+                        tint = if (isActive) DeskTheme.colors.onPrimary else DeskTheme.colors.textSecondary)
                     Spacer(Modifier.width(10.dp))
-                    Text(item.label, fontSize = 15.sp, color = if (isActive) DeskTheme.colors.onPrimary else DeskTheme.colors.text,
+                    Text(item.label, fontSize = 15.sp,
+                        color = if (isActive) DeskTheme.colors.onPrimary else DeskTheme.colors.text,
                         modifier = Modifier.weight(1f))
                     if (item.hasChildren) {
-                        Text(if (item.isExpanded) "▴" else "▾", fontSize = 12.sp,
-                            color = if (isActive) DeskTheme.colors.onPrimary else DeskTheme.colors.textSecondary)
+                        Icon(
+                            if (item.isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                            null, Modifier.size(16.dp),
+                            tint = if (isActive) DeskTheme.colors.onPrimary else DeskTheme.colors.textSecondary
+                        )
                     }
                 }
             }
@@ -152,17 +224,18 @@ fun DeskSidebar(
     }
 }
 
-data class DeskSidebarItem(
-    val label: String,
-    val icon: String = "📋",
-    val type: String = "",
-    val linkTo: String? = null,
-    val hasChildren: Boolean = false,
-    val isExpanded: Boolean = false,
-    val indent: Boolean = false
-)
+// ============================================================
+// DeskScaffold
+// ============================================================
+// Full app shell combining navbar, content area, and bottom bar.
+//
+// Usage:
+//   DeskScaffold(
+//       navBar = { DeskNavBar(...) },
+//       bottomBar = { DeskBottomBar(...) }
+//   ) { content() }
+// ============================================================
 
-// === Scaffold ===
 @Composable
 fun DeskScaffold(
     navBar: @Composable () -> Unit,
@@ -177,7 +250,17 @@ fun DeskScaffold(
     }
 }
 
-// === Page Header (for list/form/report views) ===
+// ============================================================
+// DeskPageHeader
+// ============================================================
+// Page-level header with back button, title, and action slot.
+//
+// Usage:
+//   DeskPageHeader(title = "Sales Invoice", onBack = { goBack() }) {
+//       DeskButton("Save", onClick = { save() })
+//   }
+// ============================================================
+
 @Composable
 fun DeskPageHeader(
     title: String,
@@ -187,10 +270,16 @@ fun DeskPageHeader(
 ) {
     Column {
         Row(
-            modifier.fillMaxWidth().background(DeskTheme.colors.surface).padding(horizontal = 16.dp, vertical = 10.dp),
+            modifier.fillMaxWidth().background(DeskTheme.colors.surface)
+                .padding(horizontal = DeskTheme.spacing.lg, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("< ", Modifier.clickable(onClick = onBack), fontSize = 16.sp, fontWeight = FontWeight.Medium, color = DeskTheme.colors.primary)
+            Icon(
+                Icons.AutoMirrored.Filled.ArrowBack, "Back",
+                Modifier.size(20.dp).clickable(onClick = onBack),
+                tint = DeskTheme.colors.primary
+            )
+            Spacer(Modifier.width(DeskTheme.spacing.sm))
             Text(title, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = DeskTheme.colors.text, modifier = Modifier.weight(1f))
             actions()
         }

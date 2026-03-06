@@ -8,12 +8,17 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -24,7 +29,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.deskui.theme.DeskTheme
 
-// === Status Badge ===
+// ============================================================
+// DeskStatusBadge
+// ============================================================
+// Displays a color-coded status indicator for document states.
+//
+// Usage:
+//   DeskStatusBadge(label = "Paid", color = DeskTheme.colors.success)
+//   DeskStatusBadge(status = "Draft", docstatus = 0)
+// ============================================================
+
 @Composable
 fun DeskStatusBadge(label: String, color: Color, modifier: Modifier = Modifier) {
     if (label.isNotEmpty()) {
@@ -38,7 +52,7 @@ fun DeskStatusBadge(label: String, color: Color, modifier: Modifier = Modifier) 
 }
 
 @Composable
-fun DeskStatusBadge(status: String, docstatus: Int = 0) {
+fun DeskStatusBadge(status: String = "", docstatus: Int = -1) {
     val (label, color) = resolveStatus(status, docstatus)
     DeskStatusBadge(label, color)
 }
@@ -52,45 +66,60 @@ private fun resolveStatus(status: String, docstatus: Int): Pair<String, Color> =
         "submitted", "open" -> status to Color(0xFF1A1A7D)
         else -> status to Color(0xFF1A1A7D)
     }
-    docstatus == 0 -> "Brouillon" to Color(0xFFED8936)
-    docstatus == 1 -> "Soumis" to Color(0xFF1A1A7D)
-    docstatus == 2 -> "Annule" to Color(0xFF6B7580)
+    docstatus == 0 -> "Draft" to Color(0xFFED8936)
+    docstatus == 1 -> "Submitted" to Color(0xFF1A1A7D)
+    docstatus == 2 -> "Cancelled" to Color(0xFF6B7580)
     else -> "" to Color.Transparent
 }
 
-// === Filter Chip ===
+// ============================================================
+// DeskFilterChip
+// ============================================================
+// A removable filter tag showing active filter key-value pairs.
+//
+// Usage:
+//   DeskFilterChip(label = "Status", value = "Paid", onRemove = { })
+// ============================================================
+
 @Composable
-fun DeskFilterChip(label: String, value: String, onRemove: () -> Unit) {
+fun DeskFilterChip(label: String, value: String, onRemove: () -> Unit, modifier: Modifier = Modifier) {
     Row(
-        Modifier.background(DeskTheme.colors.primary.copy(alpha = 0.1f), RoundedCornerShape(DeskTheme.shapes.chip))
+        modifier.background(DeskTheme.colors.primary.copy(alpha = 0.1f), RoundedCornerShape(DeskTheme.shapes.chip))
             .padding(horizontal = 8.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text("$label: $value", fontSize = 11.sp, color = DeskTheme.colors.primary)
         Spacer(Modifier.width(4.dp))
-        Text("×", Modifier.clickable(onClick = onRemove), fontSize = 9.sp, fontWeight = FontWeight.Bold, color = DeskTheme.colors.primary)
+        Icon(Icons.Default.Close, null, Modifier.size(12.dp).clickable(onClick = onRemove), tint = DeskTheme.colors.primary)
     }
 }
 
-// === Text Field ===
+// ============================================================
+// DeskTextField
+// ============================================================
+// Outlined text input with optional label, placeholder, and validation.
+// Supports all keyboard types, password mode, and multi-line.
+//
+// Usage:
+//   DeskTextField(value = name, onValueChange = { name = it }, label = "Full Name", required = true)
+//   DeskTextField(value = amount, onValueChange = { }, label = "Amount", keyboardType = KeyboardType.Decimal)
+//   DeskTextField(value = notes, onValueChange = { }, label = "Notes", singleLine = false, minLines = 3)
+// ============================================================
+
 @Composable
 fun DeskTextField(
     value: String, onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     label: String? = null, placeholder: String = "", required: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text, isPassword: Boolean = false,
-    singleLine: Boolean = true, minLines: Int = 1
+    singleLine: Boolean = true, minLines: Int = 1, readOnly: Boolean = false
 ) {
     Column(modifier.padding(vertical = 6.dp)) {
         if (label != null) {
-            Text(
-                label + if (required) " *" else "",
-                fontSize = 12.sp, fontWeight = FontWeight.Medium, color = DeskTheme.colors.textSecondary,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
+            DeskFieldLabel(label, required)
         }
         OutlinedTextField(
-            value = value, onValueChange = onValueChange,
+            value = value, onValueChange = onValueChange, readOnly = readOnly,
             modifier = Modifier.fillMaxWidth(), singleLine = singleLine, minLines = minLines,
             placeholder = if (placeholder.isNotEmpty()) {{ Text(placeholder, fontSize = 14.sp, color = DeskTheme.colors.textSecondary) }} else null,
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
@@ -106,18 +135,25 @@ fun DeskTextField(
     }
 }
 
-// === Select Field ===
+// ============================================================
+// DeskSelect
+// ============================================================
+// Dropdown picker with label support.
+//
+// Usage:
+//   DeskSelect(value = status, onValueChange = { status = it },
+//       options = listOf("Draft", "Submitted", "Cancelled"), label = "Status")
+// ============================================================
+
 @Composable
 fun DeskSelect(
     value: String, onValueChange: (String) -> Unit, options: List<String>,
-    modifier: Modifier = Modifier, label: String? = null, required: Boolean = false
+    modifier: Modifier = Modifier, label: String? = null, required: Boolean = false,
+    emptyLabel: String = "Select..."
 ) {
     var expanded by remember { mutableStateOf(false) }
     Column(modifier.padding(vertical = 6.dp)) {
-        if (label != null) {
-            Text(label + if (required) " *" else "", fontSize = 12.sp, fontWeight = FontWeight.Medium, color = DeskTheme.colors.textSecondary,
-                modifier = Modifier.padding(bottom = 4.dp))
-        }
+        if (label != null) DeskFieldLabel(label, required)
         Box {
             Row(
                 Modifier.fillMaxWidth().height(DeskTheme.sizes.inputHeight)
@@ -126,14 +162,15 @@ fun DeskSelect(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    value.ifEmpty { "Selectionner..." }, fontSize = 14.sp,
+                    value.ifEmpty { emptyLabel }, fontSize = 14.sp,
                     color = if (value.isEmpty()) DeskTheme.colors.textSecondary else DeskTheme.colors.text,
                     modifier = Modifier.weight(1f)
                 )
-                Text("▾", fontSize = 12.sp, color = DeskTheme.colors.textSecondary)
+                Icon(Icons.Default.KeyboardArrowDown, null, Modifier.size(16.dp), tint = DeskTheme.colors.textSecondary)
             }
             DropdownMenu(expanded, { expanded = false }) {
-                DropdownMenuItem(text = { Text("-- Aucun --") }, onClick = { onValueChange(""); expanded = false })
+                DropdownMenuItem(text = { Text("-- None --", color = DeskTheme.colors.textSecondary) },
+                    onClick = { onValueChange(""); expanded = false })
                 options.forEach { opt ->
                     DropdownMenuItem(text = { Text(opt) }, onClick = { onValueChange(opt); expanded = false })
                 }
@@ -142,7 +179,15 @@ fun DeskSelect(
     }
 }
 
-// === Checkbox ===
+// ============================================================
+// DeskCheckbox
+// ============================================================
+// Toggle switch with label.
+//
+// Usage:
+//   DeskCheckbox(label = "Is Active", checked = isActive, onCheckedChange = { isActive = it })
+// ============================================================
+
 @Composable
 fun DeskCheckbox(label: String, checked: Boolean, onCheckedChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     Row(modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -151,7 +196,16 @@ fun DeskCheckbox(label: String, checked: Boolean, onCheckedChange: (Boolean) -> 
     }
 }
 
-// === Primary Button ===
+// ============================================================
+// DeskButton
+// ============================================================
+// Primary action button. Full-width by default.
+//
+// Usage:
+//   DeskButton(text = "Save", onClick = { save() })
+//   DeskButton(text = "Saving...", onClick = { }, enabled = false)
+// ============================================================
+
 @Composable
 fun DeskButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier, enabled: Boolean = true) {
     Text(
@@ -167,7 +221,15 @@ fun DeskButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier,
     )
 }
 
-// === Section Header ===
+// ============================================================
+// DeskSectionHeader
+// ============================================================
+// Uppercase section label with divider. Used in forms and lists.
+//
+// Usage:
+//   DeskSectionHeader("Account Details")
+// ============================================================
+
 @Composable
 fun DeskSectionHeader(label: String, modifier: Modifier = Modifier) {
     if (label.isNotBlank()) {
@@ -180,7 +242,15 @@ fun DeskSectionHeader(label: String, modifier: Modifier = Modifier) {
     }
 }
 
-// === Avatar ===
+// ============================================================
+// DeskAvatar
+// ============================================================
+// Circular avatar showing user initials.
+//
+// Usage:
+//   DeskAvatar(initials = "AB")
+// ============================================================
+
 @Composable
 fun DeskAvatar(initials: String, modifier: Modifier = Modifier) {
     Box(
@@ -192,7 +262,15 @@ fun DeskAvatar(initials: String, modifier: Modifier = Modifier) {
     }
 }
 
-// === Notification Dot ===
+// ============================================================
+// DeskNotificationBadge
+// ============================================================
+// Red circle badge with count. Typically overlaid on bell icon.
+//
+// Usage:
+//   DeskNotificationBadge(count = 3)
+// ============================================================
+
 @Composable
 fun DeskNotificationBadge(count: Int, modifier: Modifier = Modifier) {
     if (count > 0) {
@@ -203,20 +281,36 @@ fun DeskNotificationBadge(count: Int, modifier: Modifier = Modifier) {
     }
 }
 
-// === Icon Box ===
+// ============================================================
+// DeskIconBox
+// ============================================================
+// Rounded square container for icons. Used inside DeskCard.
+//
+// Usage:
+//   DeskIconBox(icon = Icons.Default.ShoppingCart)
+// ============================================================
+
 @Composable
-fun DeskIconBox(icon: String, modifier: Modifier = Modifier) {
+fun DeskIconBox(icon: ImageVector, modifier: Modifier = Modifier) {
     Box(
         modifier.size(DeskTheme.sizes.iconBox).background(DeskTheme.colors.iconBg, RoundedCornerShape(DeskTheme.shapes.icon)),
         contentAlignment = Alignment.Center
     ) {
-        Text(icon, fontSize = 20.sp)
+        Icon(icon, null, Modifier.size(22.dp), tint = DeskTheme.colors.primary)
     }
 }
 
-// === Card ===
+// ============================================================
+// DeskCard
+// ============================================================
+// Grid card with icon and label. Fixed height for uniform grids.
+//
+// Usage:
+//   DeskCard(icon = Icons.Default.Inventory, label = "Item", onClick = { })
+// ============================================================
+
 @Composable
-fun DeskCard(icon: String, label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun DeskCard(icon: ImageVector, label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Column(
         modifier.fillMaxWidth().height(DeskTheme.sizes.cardHeight)
             .background(DeskTheme.colors.surface, RoundedCornerShape(DeskTheme.shapes.card))
@@ -232,7 +326,15 @@ fun DeskCard(icon: String, label: String, onClick: () -> Unit, modifier: Modifie
     }
 }
 
-// === List Item ===
+// ============================================================
+// DeskListItem
+// ============================================================
+// Standard list row with title, subtitle, status badge, and chevron.
+//
+// Usage:
+//   DeskListItem(title = "INV-001", subtitle = "Customer A", status = "Paid", onClick = { })
+// ============================================================
+
 @Composable
 fun DeskListItem(
     title: String, subtitle: String = "", status: String = "", docstatus: Int = -1,
@@ -250,44 +352,73 @@ fun DeskListItem(
             }
             if (subtitle.isNotBlank()) Text(subtitle, fontSize = 12.sp, color = DeskTheme.colors.textSecondary, maxLines = 1)
         }
-        Text(">", fontSize = 11.sp, color = DeskTheme.colors.textSecondary)
+        Icon(Icons.Default.KeyboardArrowDown, null, Modifier.size(14.dp), tint = DeskTheme.colors.textSecondary) // chevron
     }
 }
 
-// === Link Item (for sidebar/links sections) ===
+// ============================================================
+// DeskLinkItem
+// ============================================================
+// Navigation row with icon, label, and chevron. Used in sidebar links.
+//
+// Usage:
+//   DeskLinkItem(icon = Icons.Default.AccountBalance, label = "Chart of Accounts", onClick = { })
+// ============================================================
+
 @Composable
-fun DeskLinkItem(icon: String = "📄", label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun DeskLinkItem(icon: ImageVector, label: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(icon, fontSize = 14.sp, modifier = Modifier.width(24.dp))
+        Icon(icon, null, Modifier.size(16.dp), tint = DeskTheme.colors.textSecondary)
         Spacer(Modifier.width(10.dp))
         Text(label, fontSize = 14.sp, color = DeskTheme.colors.text, modifier = Modifier.weight(1f))
-        Text(">", fontSize = 11.sp, color = DeskTheme.colors.textSecondary)
+        Icon(Icons.Default.KeyboardArrowDown, null, Modifier.size(12.dp), tint = DeskTheme.colors.textSecondary)
     }
 }
 
-// === Search Bar ===
+// ============================================================
+// DeskSearchBar
+// ============================================================
+// Inline search input with icon and clear button.
+//
+// Usage:
+//   DeskSearchBar(query = searchText, onQueryChange = { searchText = it }, onClear = { searchText = "" })
+// ============================================================
+
 @Composable
 fun DeskSearchBar(query: String, onQueryChange: (String) -> Unit, onClear: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier.height(34.dp).background(DeskTheme.colors.searchBg, RoundedCornerShape(8.dp)).padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text("🔍", fontSize = 14.sp)
+        Icon(Icons.Default.Search, null, Modifier.size(14.dp), tint = DeskTheme.colors.textSecondary)
         Spacer(Modifier.width(8.dp))
         BasicTextField(
             value = query, onValueChange = onQueryChange,
             modifier = Modifier.weight(1f), singleLine = true,
             textStyle = LocalTextStyle.current.copy(fontSize = 14.sp, color = DeskTheme.colors.text),
             decorationBox = { inner ->
-                if (query.isEmpty()) Text("Rechercher...", fontSize = 14.sp, color = DeskTheme.colors.textSecondary)
+                if (query.isEmpty()) Text("Search...", fontSize = 14.sp, color = DeskTheme.colors.textSecondary)
                 inner()
             }
         )
         if (query.isNotEmpty()) {
-            Text("×", Modifier.clickable(onClick = onClear), fontSize = 14.sp, color = DeskTheme.colors.textSecondary)
+            Icon(Icons.Default.Close, null, Modifier.size(14.dp).clickable(onClick = onClear), tint = DeskTheme.colors.textSecondary)
         }
     }
+}
+
+// ============================================================
+// DeskFieldLabel (internal)
+// ============================================================
+
+@Composable
+internal fun DeskFieldLabel(label: String, required: Boolean = false) {
+    Text(
+        label + if (required) " *" else "",
+        fontSize = 12.sp, fontWeight = FontWeight.Medium, color = DeskTheme.colors.textSecondary,
+        modifier = Modifier.padding(bottom = 4.dp)
+    )
 }
